@@ -17,7 +17,7 @@ const path_mp4muted = "./src/videos/tomuted/mp4muted.mp4";
 const path_webmmuted = "./src/videos/tomuted/webmmuted.webm";
 
 // Endpoint: /api/v1/transform/webmtomp4
-router.post("/webmtomp4", (req, res) => {
+router.post("/webmtomp4", (req, res, next) => {
   const inputPath = path_original_webem;
   const outputPath = path_webmtomp4;
 
@@ -29,11 +29,12 @@ router.post("/webmtomp4", (req, res) => {
     } else {
       res.send(500, { message: "Conversion failed." });
     }
+    next();
   });
 });
 
 // Endpoint: /api/v1/transform/mp4towebm
-router.post("/mp4towebm", (req, res) => {
+router.post("/mp4towebm", (req, res, next) => {
   const inputPath = path_original_mp4;
   const outputPath = path_mp4towebm;
 
@@ -45,11 +46,12 @@ router.post("/mp4towebm", (req, res) => {
     } else {
       res.send(500, { message: "Conversion failed." });
     }
+    next();
   });
 });
 
 // Endpoint: /api/v1/transform/mutevideos
-router.post("/mutevideos", (req, res) => {
+router.post("/mutevideos", (req, res, next) => {
   const inputPath1 = path_original_mp4;
   const inputPath2 = path_original_webem;
 
@@ -86,7 +88,8 @@ router.post("/mutevideos", (req, res) => {
     })
     .catch(() => {
       res.send(500, { message: "Failed to remove audio from videos." });
-    });
+    })
+    .finally(next);
 });
 
 // Register the router with the server
